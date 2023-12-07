@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "declaration": true,
+      "noImplicitAny": true,
+      "skipLibCheck": true,
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "./dist",
+      "rootDir": ".",
+      "strict": true,
+      "noImplicitReturns": true,
+      "strictNullChecks": true,
+      "lib": ["es6", "dom"],
+      "typeRoots": ["node_modules/@types"]
+    },
+    "exclude": ["dist", "node_modules"]
+  }
+  
