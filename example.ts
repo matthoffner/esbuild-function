@@ -23,7 +23,7 @@ const main = async () => {
     javaScriptCompiler,
   };
 
-  const getCompletion = async (messages) => {
+  const getCompletion = async (messages: any) => {
     const response = await openai.createChatCompletion({
       model: "gpt-4",
       messages,
@@ -47,7 +47,7 @@ const main = async () => {
       const fnName = message.function_call.name;
       const args = message.function_call.arguments;
 
-      const fn = functions[fnName];
+      const fn = functions[fnName as keyof typeof functions];
       const result = await fn(JSON.parse(args));
       // console parameters
       console.log(`Function call: ${fnName}, Arguments: ${args}`);
@@ -55,18 +55,18 @@ const main = async () => {
 
       messages.push({
         role: "assistant",
-        content: null,
+        content: null as unknown as string,
         function_call: {
           name: fnName,
           arguments: args,
         },
-      });
+      } as any);
 
       messages.push({
         role: "function",
         name: fnName,
         content: JSON.stringify({ result: result }),
-      });
+      } as any);
     }
   }
 };

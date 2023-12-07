@@ -39,6 +39,7 @@ export const unpkgFetchPlugin = (
         if (cacheResult) {
           return cacheResult;
         }
+        return null;
       });
 
       //match css file
@@ -95,6 +96,7 @@ export const unpkgPathPlugin = (): esbuild.Plugin => {
         if (args.kind === "entry-point") {
           return { path: args.path, namespace: "a" };
         }
+        return undefined;
       });
 
       //match relative path in a module "./" or "../"
@@ -132,12 +134,10 @@ function createJavaScriptCompiler() {
 
     try {
       // Initialize esbuild-wasm if it hasn't been initialized
-      if (!esbuild.initialized) {
-        await esbuild.initialize({
-          worker: true,
-          wasmURL: `https://unpkg.com/esbuild-wasm@${ESBUILD_WASM_VERSION}/esbuild.wasm`,
-        });
-      }
+      await esbuild.initialize({
+        worker: true,
+        wasmURL: `https://unpkg.com/esbuild-wasm@${ESBUILD_WASM_VERSION}/esbuild.wasm`,
+      });
 
       // Compile the code using esbuild-wasm
       const result = await esbuild.build({
@@ -152,9 +152,12 @@ function createJavaScriptCompiler() {
       });
 
       return result.outputFiles[0].text;
-    } catch (error) {
-      return `Compilation failed: ${error.message}`;
-    }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return `Compilation failed: ${error.message}`;
+      }
+      return "Compilation failed with unknown error";
+    }    
   };
 
   return new Tool<typeof paramsSchema, z.ZodType<any, any>>(paramsSchema, name, description, execute).tool;
