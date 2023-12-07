@@ -125,7 +125,7 @@ function createJavaScriptCompiler() {
     entryPoint: z.string(),
   });
   const name = "javaScriptCompiler";
-  const description = "Compiles JavaScript code using esbuild-wasm. Input is a string of raw JavaScript code and an entry point, output is the compiled code.";
+  const description = "Compiles JavaScript, TypeScript, or JSX code within a chat interface using esbuild-wasm. Accepts raw code and an entry point as input, and provides compiled output, facilitating real-time code execution and analysis in a chatbot environment.";
 
   const execute = async (params: z.infer<typeof paramsSchema>) => {
     const { rawCode, entryPoint } = params;
