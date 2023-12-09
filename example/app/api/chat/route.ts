@@ -13,20 +13,16 @@ export const runtime = "edge";
 const functions: ChatCompletionFunctions[] = [
     {
       name: 'javaScriptCompiler',
-      description: 'Compiles JavaScript, TypeScript, or JSX code within a chat interface using esbuild-wasm. Accepts raw code and an entry point as input, and provides compiled output, facilitating real-time code execution and analysis in a chatbot environment.',
+      description: 'Compiles JavaScript, TypeScript, or JSX code within a chat interface using esbuild-wasm. Accepts raw code as input, and provides compiled output, facilitating real-time code execution and analysis in a chatbot environment.',
       parameters: {
         type: 'object',
         properties: {
           rawCode: {
             type: 'string',
             description: 'The raw code to be compiled. This can include JavaScript, TypeScript, or JSX code.'
-          },
-          entryPoint: {
-            type: 'string',
-            description: 'The entry point filename for the compilation process. This is typically the main file of the code snippet.'
           }
         },
-        required: ['rawCode', 'entryPoint']
+        required: ['rawCode']
       }      
     }
 ];

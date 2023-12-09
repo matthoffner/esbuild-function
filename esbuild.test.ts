@@ -6,8 +6,7 @@ describe('JavaScript and TypeScript Compiler Tests', () => {
   it('should compile JavaScript code correctly', async () => {
     const [javaScriptCompiler] = createJavaScriptCompiler();
     const result = await javaScriptCompiler({
-      rawCode: `1 + 1`,
-      entryPoint: 'index.js'
+      rawCode: `1 + 1`
     });
     expect(result).toBe("Compilation failed: The \"wasmURL\" option only works in the browser");
   });
@@ -15,8 +14,7 @@ describe('JavaScript and TypeScript Compiler Tests', () => {
   it('should compile TypeScript code correctly', async () => {
     const [javaScriptCompiler] = createJavaScriptCompiler();
     const result = await javaScriptCompiler({
-      rawCode: `let num: number = 1; num + 1;`,
-      entryPoint: 'index.ts'
+      rawCode: `let num: number = 1; num + 1;`
     });
     expect(result).toBe("Compilation failed: The \"wasmURL\" option only works in the browser");
   });
@@ -25,7 +23,6 @@ describe('JavaScript and TypeScript Compiler Tests', () => {
     const [javaScriptCompiler] = createJavaScriptCompiler();
     const result = await javaScriptCompiler({
       rawCode: `const element = <div>Hello World</div>; element.type;`,
-      entryPoint: 'index.jsx'
     });
     expect(result).toBe("Compilation failed: The \"wasmURL\" option only works in the browser");
   });

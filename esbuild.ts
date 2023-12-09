@@ -119,34 +119,33 @@ export const unpkgPathPlugin = (): esbuild.Plugin => {
 };
 
 // Define the version of esbuild-wasm to use
-const ESBUILD_WASM_VERSION = "0.14.42";
+const ESBUILD_WASM_VERSION = "0.14.54";
 
 function createJavaScriptCompiler() {
   const paramsSchema = z.object({
-    rawCode: z.string(),
-    entryPoint: z.string(),
+    rawCode: z.string()
   });
   const name = "javaScriptCompiler";
-  const description = "Compiles JavaScript, TypeScript, or JSX code within a chat interface using esbuild-wasm. Accepts raw code and an entry point as input, and provides compiled output, facilitating real-time code execution and analysis in a chatbot environment.";
+  const description = "Compiles JavaScript, TypeScript, or JSX code within a chat interface using esbuild-wasm. Accepts raw code as input, and provides compiled output, facilitating real-time code execution and analysis in a chatbot environment.";
 
   const execute = async (params: z.infer<typeof paramsSchema>) => {
-    const { rawCode, entryPoint } = params;
+    const { rawCode } = params;
 
     try {
       // Initialize esbuild-wasm if it hasn't been initialized
       await esbuild.initialize({
         worker: true,
-        wasmURL: `https://unpkg.com/esbuild-wasm@${ESBUILD_WASM_VERSION}/esbuild.wasm`,
+        wasmURL: `https://unpkg.com/esbuild-wasm@${ESBUILD_WASM_VERSION}/esbuild.wasm`
       });
 
       // Compile the code using esbuild-wasm
       const result = await esbuild.build({
-        entryPoints: [entryPoint],
+        entryPoints: ["index.js"],
         bundle: true,
         write: false,
         minify: true,
         outdir: "/",
-        plugins: [unpkgPathPlugin(), unpkgFetchPlugin(rawCode, entryPoint)],
+        plugins: [unpkgPathPlugin(), unpkgFetchPlugin(rawCode, "index.js")],
         metafile: true,
         allowOverwrite: true
       });
@@ -156,7 +155,7 @@ function createJavaScriptCompiler() {
       if (error instanceof Error) {
         return `Compilation failed: ${error.message}`;
       }
-      return "Compilation failed with unknown error";
+      return `Compilation failed with unknown error: ${error}`;
     }    
   };
 

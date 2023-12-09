@@ -16,11 +16,7 @@ import { createJavaScriptCompiler } from "../../dist/esm/esbuild";
 const [compiler] = createJavaScriptCompiler();
 
 const examples = [
-  "Convert this JSON object to a TypeScript interface.",
-  "Create a React functional component with a useState hook.",
-  "Write a JavaScript function to sort an array of numbers in ascending order.",
-  "Show me how to fetch data from an API using async/await in JavaScript.",
-  "Demonstrate a simple example of JSX conditional rendering.",
+  "Compile and run a TypeScript file that creates an interactive to-do list with add, remove, and toggle completion functionalities."
 ];
 
 export default function Chat() {
@@ -37,12 +33,13 @@ export default function Chat() {
       parsedFunctionCallArguments = JSON.parse(args);
     }
 
-    console.log("functionCallHandler");
-    console.log(functionCall, chatMessages);
-
     let result;
 
-    result = JSON.stringify(compiler(parsedFunctionCallArguments.code));
+    const compiledResult = compiler({ rawCode: parsedFunctionCallArguments.rawCode });
+    console.log(compiledResult);
+    result = JSON.stringify(compiledResult);
+    
+    console.log(result);
 
     return {
       messages: [
@@ -109,7 +106,7 @@ export default function Chat() {
       ),
     },
     function: {
-      avatar: <div>function</div>,
+      avatar: <div>⒡</div>,
       bgColor: "bg-gray-200",
       avatarColor: "bg-blue-500",
       dialogComponent: (message: Message) => (
@@ -123,11 +120,6 @@ export default function Chat() {
 
   return (
     <main className="flex flex-col items-center justify-between pb-40">
-      <div className="absolute top-5 hidden w-full justify-between px-5 sm:flex">
-        <div className="rounded-lg p-2 text-2xl transition-colors duration-200 hover:bg-stone-100 sm:bottom-auto">
-          🤖
-        </div>
-      </div>
       {messages.length > 0 ? (
         messages.map((message, i) => {
           return (
