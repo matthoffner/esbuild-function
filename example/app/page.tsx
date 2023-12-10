@@ -16,7 +16,10 @@ import { createEsbuilder } from "../../dist/esm/esbuild";
 const [esbuild] = createEsbuilder();
 
 const examples = [
-  "Compile and run a TypeScript file that creates an interactive to-do list with add, remove, and toggle completion functionalities."
+  "Create a JavaScript function that finds the highest number in an array.",
+  "Develop a simple JSX component that takes in a user's name as a prop and displays a personalized greeting.",
+  "Build a simple TypeScript function that adds two numbers together and includes type checking.",
+  "Create a basic TSX React component for a ToDo item, it should have properties for the task name and a boolean to represent if it is completed or not, and should render accordingly."
 ];
 
 export default function Chat() {
@@ -36,10 +39,8 @@ export default function Chat() {
     let result;
     let entryPoint = parsedFunctionCallArguments.entryPoint || "index.js";
 
-    const compiledResult = esbuild({ rawCode: parsedFunctionCallArguments.rawCode, entryPoint  });
+    const compiledResult = await esbuild({ rawCode: parsedFunctionCallArguments.rawCode, entryPoint  });
     result = JSON.stringify(compiledResult);
-    
-    console.log(result);
 
     return {
       messages: [
