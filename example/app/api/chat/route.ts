@@ -20,6 +20,10 @@ const functions: ChatCompletionFunctions[] = [
           rawCode: {
             type: 'string',
             description: 'The raw code to be compiled. This can include JavaScript, TypeScript, or JSX code.'
+          },
+          entryPoint: {
+            type: 'string',
+            description: 'The file to be compiled, for javascript the default is index.js. For jsx use index.jsx. For tsx use index.tsx. For ts use index.ts.'
           }
         },
         required: ['rawCode']

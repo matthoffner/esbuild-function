@@ -11,9 +11,9 @@ import remarkGfm from "remark-gfm";
 import Textarea from "react-textarea-autosize";
 import { Collapse } from "./collapse";
 import { LoadingCircle, SendIcon } from "./icons";
-import { createJavaScriptCompiler } from "../../dist/esm/esbuild";
+import { createEsbuilder } from "../../dist/esm/esbuild";
 
-const [compiler] = createJavaScriptCompiler();
+const [esbuild] = createEsbuilder();
 
 const examples = [
   "Compile and run a TypeScript file that creates an interactive to-do list with add, remove, and toggle completion functionalities."
@@ -34,9 +34,9 @@ export default function Chat() {
     }
 
     let result;
+    let entryPoint = parsedFunctionCallArguments.entryPoint || "index.js";
 
-    const compiledResult = compiler({ rawCode: parsedFunctionCallArguments.rawCode });
-    console.log(compiledResult);
+    const compiledResult = esbuild({ rawCode: parsedFunctionCallArguments.rawCode, entryPoint  });
     result = JSON.stringify(compiledResult);
     
     console.log(result);

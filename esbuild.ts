@@ -121,31 +121,35 @@ export const unpkgPathPlugin = (): esbuild.Plugin => {
 // Define the version of esbuild-wasm to use
 const ESBUILD_WASM_VERSION = "0.14.54";
 
-function createJavaScriptCompiler() {
+function createEsbuilder() {
   const paramsSchema = z.object({
-    rawCode: z.string()
+    rawCode: z.string(),
+    entryPoint: z.string()
   });
-  const name = "javaScriptCompiler";
-  const description = "Compiles JavaScript, TypeScript, or JSX code within a chat interface using esbuild-wasm. Accepts raw code as input, and provides compiled output, facilitating real-time code execution and analysis in a chatbot environment.";
+  const name = "esbuilder";
+  const description = "Compiles JavaScript, TypeScript, JSX, or TSX code within a chat interface using esbuild-wasm. Accepts raw code as input and sets the filename dynamically based on code type (i.e., 'index.js' for JavaScript, 'index.ts' for TypeScript, 'index.jsx' for JSX and 'index.tsx' for TSX). The compiler presents a compiled output, facilitating real-time code execution and analysis in a chatbot environment.";
 
   const execute = async (params: z.infer<typeof paramsSchema>) => {
-    const { rawCode } = params;
-
+    const { rawCode, entryPoint } = params;
     try {
       // Initialize esbuild-wasm if it hasn't been initialized
       await esbuild.initialize({
         worker: true,
         wasmURL: `https://unpkg.com/esbuild-wasm@${ESBUILD_WASM_VERSION}/esbuild.wasm`
       });
+    } catch (err) {
+      console.log(err);
+    }
 
+    try {
       // Compile the code using esbuild-wasm
       const result = await esbuild.build({
-        entryPoints: ["index.js"],
+        entryPoints: [entryPoint],
         bundle: true,
         write: false,
         minify: true,
         outdir: "/",
-        plugins: [unpkgPathPlugin(), unpkgFetchPlugin(rawCode, "index.js")],
+        plugins: [unpkgPathPlugin(), unpkgFetchPlugin(rawCode, entryPoint)],
         metafile: true,
         allowOverwrite: true
       });
@@ -162,4 +166,4 @@ function createJavaScriptCompiler() {
   return new Tool<typeof paramsSchema, z.ZodType<any, any>>(paramsSchema, name, description, execute).tool;
 }
 
-export { createJavaScriptCompiler };
+export { createEsbuilder };
